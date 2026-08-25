@@ -4,9 +4,7 @@ import requests
 
 st.set_page_config(page_title="Ask the Cosmos", page_icon="🪐", layout="centered")
 
-# ---------------------------------------------------------------------------
-# 1. Ask the NebulaQA API (FastAPI server running api.py) for an answer
-# ---------------------------------------------------------------------------
+
 API_URL = "http://localhost:8000/ask"
 
 
@@ -19,7 +17,7 @@ def find_answer(question: str) -> str:
         response = requests.post(
             API_URL,
             json={"question": q, "max_new_tokens": 150},
-            timeout=60,
+            timeout=180,
         )
         response.raise_for_status()
         data = response.json()
@@ -33,9 +31,6 @@ def find_answer(question: str) -> str:
         return f"⚠️ صار خطأ غير متوقع: {e}"
 
 
-# ---------------------------------------------------------------------------
-# 2. Animated space background (stars + self-spinning planets), pure CSS/HTML
-# ---------------------------------------------------------------------------
 def _generate_stars(n: int, seed: int) -> str:
     rnd = random.Random(seed)
     return ", ".join(f"{rnd.randint(0, 2000)}px {rnd.randint(0, 2000)}px #FFF" for _ in range(n))
@@ -181,9 +176,8 @@ BACKGROUND_HTML = BACKGROUND_TEMPLATE.replace("SMALL_STARS", SMALL_STARS).replac
 
 st.markdown(BACKGROUND_HTML, unsafe_allow_html=True)
 
-# ---------------------------------------------------------------------------
-# 3. App UI
-# ---------------------------------------------------------------------------
+
+
 st.title("🪐 Ask the Nebula")
 st.write("Ask me anything about planets, stars, galaxies, black holes, and the rest of the universe.")
 
