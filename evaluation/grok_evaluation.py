@@ -1,16 +1,21 @@
 import os
 import json
 import pandas as pd
+from dotenv import load_dotenv
 from openai import OpenAI
 
+# يقرأ ملف .env تلقائياً من نفس المجلد
+load_dotenv()
 
-XAI_API_KEY = "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"
+XAI_API_KEY = os.getenv("XAI_API_KEY")
+if not XAI_API_KEY:
+    raise ValueError("XAI_API_KEY مش موجود — تأكدي من ملف .env")
 
 client = OpenAI(api_key=XAI_API_KEY, base_url="https://api.x.ai/v1")
 
-
+# ملف evaluation_results.csv يلي طلع من كود evaluation.py على Colab
 INPUT_CSV = "evaluation_results.csv"
-N_QUESTIONS = 15 
+N_QUESTIONS = 15  # كم سؤال بدك تقيّمي (بتقدري تغيّريه)
 
 df = pd.read_csv(INPUT_CSV)
 sample = df.sample(min(N_QUESTIONS, len(df)), random_state=42).reset_index(drop=True)
