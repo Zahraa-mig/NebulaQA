@@ -1,14 +1,21 @@
+import os
 import torch
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from peft import PeftModel
 
-MODEL_PATH = "../model/qwen-qlora-final"
+load_dotenv()
+
+APP_NAME = os.getenv("APP_NAME", "NebulaQA API")
+APP_VERSION = os.getenv("APP_VERSION", "1.0.0")
+
+MODEL_PATH = "./qwen-qlora-final"
 BASE_MODEL = "Qwen/Qwen2.5-1.5B-Instruct"
 
-app = FastAPI(title="NebulaQA API")
+app = FastAPI(title=APP_NAME, version=APP_VERSION)
 
 app.add_middleware(
     CORSMiddleware,
